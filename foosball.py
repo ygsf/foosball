@@ -13,16 +13,18 @@ GPIO_WHITE_CHANNEL = 18                 # GPIO channel for WHITE team IR receive
 def break_beam_callback(channel):
     if GPIO.input(GPIO_YELLOW_CHANNEL):
         print("Yellow Gool!")
+        return None
     if GPIO.input(GPIO_WHITE_CHANNEL):
         print("White Gool!")
+        return None
         
 # setup GPIO channels
 GPIO.setup(GPIO_YELLOW_CHANNEL, GPIO.IN, pull_up_down=GPIO.PUD_UP)        # set GPIO channel with GPIO_YELLOW_CHANNEL as an input channel.
 GPIO.setup(GPIO_WHITE_CHANNEL, GPIO.IN, pull_up_down=GPIO.PUD_UP)        # set GPIO channel with GPIO_YELLOW_CHANNEL as an input channel.
 #GPIO.setup(GPIO_WHITE_CHANNEL, GPIO.IN)         #, pull_up_down=GPIO.PUD_UP)
 
-GPIO.add_event_detect(GPIO_YELLOW_CHANNEL, GPIO.RISING, callback=break_beam_callback)  #RISING, FALLING or BOTH
-GPIO.add_event_detect(GPIO_WHITE_CHANNEL, GPIO.RISING, callback=break_beam_callback)  #RISING, FALLING or BOTH
+GPIO.add_event_detect(GPIO_YELLOW_CHANNEL, GPIO.FALLING, callback=break_beam_callback)  #RISING, FALLING or BOTH
+GPIO.add_event_detect(GPIO_WHITE_CHANNEL, GPIO.FALLING, callback=break_beam_callback)  #RISING, FALLING or BOTH
 
 message = input("press enter to quit\n\n")
 GPIO.cleanup()
