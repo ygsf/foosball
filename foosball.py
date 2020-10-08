@@ -19,19 +19,23 @@ GPIO.setwarnings(True) # TODO: might come in useful now.
 # variables
 GPIO_YELLOW_CHANNEL = 17                # GPIO channel for YELLOW team IR receiver. You can use any GPIO port.
 GPIO_WHITE_CHANNEL = 18                 # GPIO channel for WHITE team IR receiver. You can use any GPIO port.
+
+SCORE_CELL_YELLOW = 2
+SCORE_CELL_WHITE = 3
+SCORE_ROW = 2
                                         
 def break_beam_callback(channel):
     if GPIO.input(GPIO_YELLOW_CHANNEL):
         print("Yellow Gool!")
-        cell = sheet.cell(2,2).value
-        print(cell)
-        cell = int(cell) + 1
-        print(cell)
-        sheet.update_cell(2,2,cell)
+        cellY = sheet.cell(SCORE_ROW, SCORE_CELL_YELLOW).value
+        cellY = int(cellY) + 1
+        sheet.update_cell(SCORE_ROW, SCORE_CELL_YELLOW, cellY)
         return None
     if GPIO.input(GPIO_WHITE_CHANNEL):
         print("White Gool!")
-        sheet.update_cell(2,3,"4")
+        cellW = sheet.cell(SCORE_ROW, SCORE_CELL_WHITE).value
+        cellW = int(cellW) + 1
+        sheet.update_cell(SCORE_ROW, SCORE_CELL_WHITE, cellW)
         return None
         
 # setup GPIO channels
