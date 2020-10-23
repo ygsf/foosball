@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" height: 500px width:500px>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Foosball Result Frame</title>
+    <script src="params.js"></script>
+</head>
+<body>
+
+<style>
+html, body {
+  height: 100%;
+  margin: 10;
+}
+
+iframe{width:10vw;height:10vh;border:5}
+  th, td {
+    border: 0px solid white;
+    margin: 10;
+    text-align: center;
+    padding: 15px;
+  }
+
+  table {
+    border: 10; border-color: black;
+    border-spacing:0px;
+    border-collapse:collapse;
+    background-color:green;
+    opacity: 0.5;
+    height: 100%;
+    width: 100%;
+    margin: 10;
+  }
+  .yellowcell {
+    color: Yellow;
+  }
+  .whitecell {
+    color: white;
+  }
+  .results_table {
+    color: green;
+  }
+  .score {
+    font-size:300px;
+  }
+  .head_color {
+    font-size:60px;
+  }
+
+
+</style>
+
+<table class="tg" border="20" class="results_table">
+    <thead>
+      <tr>
+        <th class="yellowcell head_color" id=yellowsname>Yellow</th>
+        <th background-color="green"></th>
+        <th class="whitecell head_color" id=whitesname>White</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="yellowcell score" id=yellowscore></td>
+        <td background-color="green"><img background-color="green" src="ball5.jpg" width="90" height="90" align="center"></td>
+        <td class="whitecell score" id=whitescore></td>
+      </tr>
+    </tbody>
+    </table>
+
+    <script>
+    console.log("sheetID="+sheetID);
+const headerEl = document.querySelector('.header');
+const preFix = `https://spreadsheets.google.com/feeds/list/`;
+const postFix = `/od6/public/values?alt=json`;
+const spreadsheet = preFix + sheetID + postFix;
+
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true);
+    xmlHttp.send(null);
+}
+
+  httpGetAsync(spreadsheet, function(res){
+    console.log(JSON.parse(res))
+    document.getElementById('yellowsname').innerHTML = JSON.parse(res).feed.entry[1].gsx$yellow.$t
+    document.getElementById('whitesname').innerHTML = JSON.parse(res).feed.entry[1].gsx$white.$t
+    document.getElementById('yellowscore').innerHTML = JSON.parse(res).feed.entry[0].gsx$yellow.$t
+    document.getElementById('whitescore').innerHTML = JSON.parse(res).feed.entry[0].gsx$white.$t
+  })
+
+  setInterval(function(res){
+    httpGetAsync(spreadsheet, function(res){
+      // console.log(JSON.parse(res).feed.entry[0].gsx$yellow.$t)
+      // console.log(JSON.parse(res).feed.entry[0].gsx$white.$t)
+      document.getElementById('yellowsname').innerHTML = JSON.parse(res).feed.entry[1].gsx$yellow.$t
+      document.getElementById('whitesname').innerHTML = JSON.parse(res).feed.entry[1].gsx$white.$t
+      document.getElementById('yellowscore').innerHTML = JSON.parse(res).feed.entry[0].gsx$yellow.$t
+      document.getElementById('whitescore').innerHTML = JSON.parse(res).feed.entry[0].gsx$white.$t
+    })
+  },1000)
+
+function resizeWin() {
+  myWindow.resizeTo(100, 100);
+  myWindow.focus();
+}
+
+    </script>
+</body>
+</html>
